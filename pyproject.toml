@@ -1,0 +1,58 @@
+[project]
+name = "metaheuristic-collection"
+version = "2026a0"
+description = "A collection of metaheuristic algorithms"
+readme = "README.md"
+authors = [
+    { name = "Diego-Sealtiel Valderrama", email = "sealtielfreak@yandex.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "httpx>=0.28.1",
+    "lxml>=6.1.3",
+    "neomodel>=7.0.0",
+    "openpyxl>=3.1.5",
+    "pandas>=2.0.3",
+    "pydantic>=2.13.5",
+    "pydantic-ai>=2.51.0",
+    "pydantic-settings>=2.15.0",
+    "pypdf>=6.19.0",
+    "requests>=2.34.2",
+    "scrapy>=2.19.0",
+    "typer>=0.27.2",
+]
+
+[project.scripts]
+mhc = "metaheuristic_collection.cli:app"
+# kept so the documented `uv run metaheuristic-collection` still builds the xlsx
+metaheuristic-collection = "metaheuristic_collection.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.14.1",
+    "pandas-stubs>=2.0.3.230814",
+    "ruff>=0.16.9",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
+
+[tool.mypy]
+# No python_version pin on purpose: numpy/pandas stubs use `type` statements
+# (3.12+ syntax) and fail to parse when mypy targets 3.10. The 3.10 floor is
+# enforced by ruff's target-version instead.
+plugins = ["pydantic.mypy"]  # otherwise Settings() looks like a missing-arg call
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+warn_return_any = true
+warn_unreachable = true
+
