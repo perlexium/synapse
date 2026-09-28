@@ -83,7 +83,13 @@ def test_curation_fields_joins_the_audit_sheets_on_title() -> None:
             ]
         ),
         "audit_duplicates": pd.DataFrame(
-            [{"kept_title": "Grey Wolf Optimizer: a new metaheuristic", "dropped_source": "Excel", "dropped_title": "Grey wolf optimizer"}]
+            [
+                {
+                    "kept_title": "Grey Wolf Optimizer: a new metaheuristic",
+                    "dropped_source": "Excel",
+                    "dropped_title": "Grey wolf optimizer",
+                }
+            ]
         ),
     }
     extra = db.curation_fields(sheets)
