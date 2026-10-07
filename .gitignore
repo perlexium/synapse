@@ -255,6 +255,9 @@ poetry.toml
 # ruff
 .ruff_cache/
 
+# charts written by `synapse image`
+data/figures/
+
 # LSP config files
 pyrightconfig.json
 
@@ -306,3 +309,13 @@ Backup of *.doc*
 # Documents
 *.pdf
 
+
+### Synapse ###
+# the SQLite database and its WAL sidecars: the source of truth, filled with
+# `synapse ingest` / `synapse search --online` / `synapse scrape`
+data/synapse.db
+data/synapse.db-shm
+data/synapse.db-wal
+data/figures/
+# the spreadsheet `synapse export workbook` writes
+synapse_export.xlsx
