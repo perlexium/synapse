@@ -275,6 +275,14 @@ AGENT.md
 *agents.json
 *agent.json
 
+# OpenCode session state and project-local agent skills
+.opencode/
+.opencode*
+skills/
+
+# graphify output (local knowledge graph)
+graphify-out/
+
 # Cache, local knowledge graphs, and vector databases
 .graphify/
 .graphify_cache/
