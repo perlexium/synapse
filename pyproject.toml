@@ -1,32 +1,28 @@
 [project]
-name = "metaheuristic-collection"
-version = "2026a0"
-description = "A collection of metaheuristic algorithms"
+name = "synapse"
+version = "1.0.0"
+description = "A subject-agnostic collection of scholarly works, in SQLite"
 readme = "README.md"
 authors = [
     { name = "Diego-Sealtiel Valderrama", email = "sealtielfreak@yandex.com" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 dependencies = [
     "beautifulsoup4>=4.15.0",
     "httpx>=0.28.1",
-    "lxml>=6.1.3",
-    "neomodel>=7.0.0",
+    "markitdown[pdf]>=0.1.8",
+    "matplotlib>=3.10",
     "openpyxl>=3.1.5",
-    "pandas>=2.0.3",
     "pydantic>=2.13.5",
     "pydantic-ai>=2.51.0",
     "pydantic-settings>=2.15.0",
-    "pypdf>=6.19.0",
-    "requests>=2.34.2",
-    "scrapy>=2.19.0",
+    "selenium>=4.20",
+    "sqlmodel>=0.0.47",
     "typer>=0.27.2",
 ]
 
 [project.scripts]
-mhc = "metaheuristic_collection.cli:app"
-# kept so the documented `uv run metaheuristic-collection` still builds the xlsx
-metaheuristic-collection = "metaheuristic_collection.cli:app"
+synapse = "synapse.cli:app"
 
 [build-system]
 requires = ["uv_build>=0.12.10,<0.13.0"]
@@ -35,21 +31,31 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "mypy>=1.14.1",
-    "pandas-stubs>=2.0.3.230814",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.0",
+    "mkdocstrings-python>=1.18.0",
     "ruff>=0.16.9",
+    "types-openpyxl>=3.1.5.20260827",
 ]
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
 
+[tool.ruff.lint.per-file-ignores]
+# db.py is the one module without `from __future__ import annotations`, because
+# SQLModel resolves a relationship target from the *evaluated* annotation. So its
+# forward references (`list["Paper"]`, declared before `Paper` exists) are real
+# syntax rather than lazy strings, and UP037 would "fix" them into a NameError.
+"src/synapse/persistence/models.py" = ["UP037"]
+
 [tool.mypy]
-# No python_version pin on purpose: numpy/pandas stubs use `type` statements
-# (3.12+ syntax) and fail to parse when mypy targets 3.10. The 3.10 floor is
-# enforced by ruff's target-version instead.
+# numpy (via matplotlib) ships stubs that use `type` statements — 3.12+ syntax
+# mypy can only parse when it targets 3.12 or newer. The floor is 3.14 regardless.
+python_version = "3.14"
 plugins = ["pydantic.mypy"]  # otherwise Settings() looks like a missing-arg call
 disallow_untyped_defs = true
 disallow_untyped_calls = true
