@@ -1,0 +1,75 @@
+site_name: Synapse
+site_description: A subject-agnostic collection of scholarly works, in SQLite
+site_author: Diego-Sealtiel Valderrama
+# no remote is configured yet (`git remote -v` is empty), so the URL is a
+# placeholder. `mkdocs gh-deploy` refuses to publish without `site_url`. Swap both
+# when the repo is pushed.
+site_url: https://example.github.io/synapse/
+repo_url: https://github.com/example/synapse
+# the two snippet pages are generated from files at the repo root, so an "edit this
+# page" link would land somewhere meaningless. The prose lives in README.md anyway.
+edit_uri: ""
+
+docs_dir: docs
+site_dir: site
+
+nav:
+  - Home: index.md
+  - Database schema: schema.md
+  - API reference: api.md
+  - Changelog: changelog.md
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.code.annotate
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+  palette:
+    # respects the reader's OS setting, which is the default people expect
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+  # renders the module docstrings; `mkdocstrings-python` is a dev dep for exactly
+  # this. A docstring that is wrong on the site is wrong in `--help` too.
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: false
+            docstring_style: google
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  # `--8<--` is how docs/index.md and docs/changelog.md include README.md and
+  # CHANGELOG.md verbatim. One copy of the prose, two places it appears.
+  - pymdownx.snippets:
+      base_path:
+        - .
+      check_paths: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.details
